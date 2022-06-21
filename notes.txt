@@ -1,0 +1,18 @@
+...::: mongoose schema properties :::...
+https://mongoosejs.com/docs/schematypes.html
+
+
+type: String
+required: Boolean
+default: default value if not specified
+lowercase:true    converts data to lowercase (only works with strings)
+validate: function (adds a validator function )
+get: func,  set:func.. custom getter setter
+immutable: boolean, makes that path immutable
+
+
+test routes from shell
+http GET http://localhost:5000/user
+
+http POST http://localhost:5000/user username=onur password=1283476
+application/json and that json body is {"username":"onur", "password","1283476"}
