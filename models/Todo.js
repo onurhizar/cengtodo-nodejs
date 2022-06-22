@@ -14,6 +14,7 @@ const TodoSchema = new Schema({
 
     details: {
         type: String,
+        default: "no details",
     },
 
     hidden: {
@@ -24,6 +25,11 @@ const TodoSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+
+    grade: {
+        type: Number,
+        default: 1,
     }
 
 });

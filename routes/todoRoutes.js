@@ -20,7 +20,7 @@ router.post('/', function(req,res){
     try {
         const newTodo = new Todo(req.body)
         newTodo.save().then(doc => {
-            res.send(doc);
+            res.status(201).send(doc);
         })
     } catch (error) {
         res.send(error.message);

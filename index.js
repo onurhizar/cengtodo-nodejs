@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const helmet = require("helmet");
 const path = require("path");
+const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 
 // database
@@ -10,6 +11,7 @@ const connectDB = require("./config/db");
 connectDB();
 
 // middlewares
+app.use(cors()) // for development only
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(helmet.hidePoweredBy()); // or use helmet() for all protections
