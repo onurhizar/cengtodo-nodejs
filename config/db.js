@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const db_username = process.env.MONGO_ATLAS_USERNAME;
 const db_password = process.env.MONGO_ATLAS_PASSWORD;
 
+const mongooseOptions = {dbName: "CengTodoDB"}
 
 async function connectDB(){
     if (!db_username || !db_password) {
@@ -14,7 +15,7 @@ async function connectDB(){
     const uri = `mongodb+srv://${joined}@iyte-ceng-todo-db.aux1spp.mongodb.net/?retryWrites=true&w=majority`
     
     try {
-        await mongoose.connect(uri);
+        await mongoose.connect(uri, mongooseOptions);
         console.log("Connected to the MongoDB");
     } catch (error) {
         console.log("Error while connecting to MongoDB!");

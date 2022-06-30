@@ -6,7 +6,7 @@ const Todo = require("../models/Todo");
 // PUBLIC GET /todo  :::  lists all todo items
 router.get('/', function(req,res){
     Todo.find({}, function (err, users) {
-        if (err) return res.send(err.message)
+        if (err) return res.send( {error: err.message} )
         res.send(users);
     })
 })
@@ -15,7 +15,8 @@ router.get('/', function(req,res){
 // PRIVATE POST /todo  :::  for adding new todo item
 router.post('/', function(req,res){
     // 1: check if post body is empty
-    if (!req.body.courseCode || !req.body.type) return res.send("ERROR: post body is missing");
+    if (!req.body.courseCode) return res.status(400).send({error:"course code field is missing"})
+    if (!req.body.type) return res.status(400).send({error:"type field is missing"})
 
     try {
         const newTodo = new Todo(req.body)

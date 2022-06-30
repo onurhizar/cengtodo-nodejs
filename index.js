@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 5000;
 
 // database
 const connectDB = require("./config/db");
-connectDB();
+const db = connectDB();
+
 
 // middlewares
 app.use(cors()) // for development only
@@ -28,4 +29,8 @@ app.get('/test', (req,res)=>{res.send("ok")})
 // 404 page
 app.all('*', (req,res)=>res.status(404).send("404 not found"))
 
-app.listen(PORT, () => console.log(`Server has started at port ${PORT}`))
+
+// Server only starts when mongoose connection is established
+db.then(function(){
+    app.listen(PORT, ()=>console.log(`Server has started at port ${PORT}`))
+}).catch( e => console.log(e.message))

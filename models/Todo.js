@@ -27,6 +27,10 @@ const TodoSchema = new Schema({
         default: Date.now,
     },
 
+    endsAt: {
+        type: Date,
+    },
+
     grade: {
         type: Number,
         default: 1,
@@ -35,17 +39,5 @@ const TodoSchema = new Schema({
 });
 
 const Todo = new model("todo", TodoSchema);
-
-async function testRun(){
-    require("../config/db")(); // connnect to the mongo db
-    const todo1 = new Todo({
-        courseCode:"Math142",
-        title: "TestTitle",
-        details: "blabla"
-    });
-    
-    await todo1.save();
-    console.log("okay")
-}
 
 module.exports = Todo;
