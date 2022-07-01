@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const db_username = process.env.MONGO_ATLAS_USERNAME;
 const db_password = process.env.MONGO_ATLAS_PASSWORD;
 
-const mongooseOptions = {dbName: "CengTodoDB"}
+const mongooseOptions = {dbName: process.env.MONGO_ATLAS_DBNAME}
 
 async function connectDB(){
     if (!db_username || !db_password) {

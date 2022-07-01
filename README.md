@@ -1,12 +1,34 @@
-npm i -D nodemon
+At prototyping stage, all response codes are just 200, 400, 500 for simplicity
 
-`git branch <branchname>` : creates a new branch: 
-`git checkout <branchname>` : switchs to a branch
-`git checkout -b <branchname>` : creates and switch to a new branch: 
 
-`git branch -d <branchname>` : deletes a branch when it is not needed anymore (if it merged to main)
-`git branch -D <branchname>` : deletes a branch (if it is not merged to main)
+# Errors
 
-`git merge <branchname>`: takes the changes you’ve committed in branch_name and add them to the branch that **you’re currently on**.
+Only sends the first error occured.
+Error body example:
+```
+Status Code: 400
+{
+    error: {
+        code: "auth-01", 
+        message: "Username or Password is not correct"
+    }
+}
+```
 
-`nodemon index`
+# Error Codes
+@`/api/todo`
+```
+mongoose        : general code for mongoose problems
+ef-coursecode   : Course code field is empty
+ef-type         : Type field is empty
+invalid-id      : Given ID is invalid
+```
+
+
+## .env example:
+```
+PORT=5000
+MONGO_ATLAS_USERNAME=USER123
+MONGO_ATLAS_PASSWORD=gT52bS21adD
+MONGO_ATLAS_DBNAME=CengTodoApp
+```
