@@ -1,49 +1,75 @@
 const express = require("express");
 const router = express.Router();
-
 const User = require("../models/User");
 
-// GET /user/
+
+// GET /api/user/
 router.get('/', function(req,res){
     User.find({}, function(err,users){
-        if (err) return res.send(err.message)
-        return res.send(users)
+        if (err) {
+            const errorBody = {error: {code:"mongoose", message: err.message}}
+            console.log(errorBody.error.code, err.message)
+            return res.status(400).json(errorBody)
+        }
+        return res.status(200).json(users)
     })
     }
 )
 
-// POST /user/ with json body , REGISTER PAGE
+// POST /api/user/ with json body , REGISTER PAGE
 router.post('/', async function(req,res){
     // 1: check if given post body is empty
-    if (!req.body.username) return res.status(400).send("ERROR: username cannot be empty");
-    if (!req.body.password) return res.status(400).send("ERROR: password cannot be empty");
+    if (!req.body.username) {
+        const errorBody = {error: {code:"ef-usr", message: "Username field is empty"}}
+        return res.status(400).json(errorBody);
+    }
+    if (!req.body.password) {
+        const errorBody = {error: {code:"ef-psw", message: "Password field is empty"}}
+        return res.status(400).json(errorBody);
+    }
 
     // 2: if not empty, check if username exists..
     const result = await User.findOne({username: req.body.username})
-    if (result) return res.status(400).send("ERROR: user exists.");
+    if (result) {
+        const errorBody = {error: {code:"exists", message: "user exists"}}
+        return res.status(400).json(errorBody);
+    }
+
     const newUser = await User.create(req.body);
-    res.status(201).send(newUser);
+    res.status(200).json(newUser);
 })
 
 
 // GET /user/id/:userId, URL params
 router.get('/id/:userId', function(req,res){
-    if (!req.params.userId) return res.status(404).send("invalid username");
+    if (!req.params.userId) {
+        const errorBody = {error: {code:"invalid-id", message: "Given ID is invalid"}}
+        return res.status(400).json(errorBody);
+    }
     User.findById(req.params.userId, function(err, user){
-        if (err) return res.status(404).send("Error: user id not found");
-        if (user) return res.send(user);
-        else res.status(404).send("Error: username not found");
+        if (err) {
+            const errorBody = {error:{code:"invalid-id", message: err.message}}
+            return res.status(400).json(errorBody);
+        }
+        if (user) return res.json(user);
+        else res.status(400).json({error:{code:"invalid-id", message: "id not found"}});
     })
 })
 
 
 // GET /user/:username, URL params
 router.get('/:username', function(req,res){
-    if (!req.params.username) return res.status(404).send("invalid username");
+    if (!req.params.username) {
+        const errorBody = {error:{code:"invalid-id", message: "invalid username"}}
+        return res.status(400).json(errorBody);
+    }
     User.findOne({username:req.params.username}, function(err, user){
-        if (err) return res.status(404).send("Error: username not found");
-        if (user) return res.send(user);
-        else res.status(404).send("Error: username not found");
+        if (err) {
+            const errorBody = {error:{code:"invalid-id", message: err.message}}
+            return res.status(400).json(errorBody);
+        }
+        if (user) return res.status(200).json(user);
+        else res.status(400).json({error:{code:"invalid-id", message:"user not found"}});
     })
 })
 

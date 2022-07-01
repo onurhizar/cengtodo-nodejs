@@ -12,15 +12,15 @@ ef-id           : Id field is empty
 invalid-id      : Given id is invalid
  */
 
+
 // PUBLIC GET /todo  :::  lists all todo items
 router.get('/', function(req,res){
     Todo.find({}, function (err, users) {
         if (err) {
             const errorBody = {error: {code:"mongoose", message: err.message}}
-            console.log(errorBody.error.code, err.message)
             return res.status(400).json(errorBody)
         }
-        res.send(users);
+        res.json(users);
     })
 })
 
@@ -43,8 +43,9 @@ router.post('/', function(req,res){
         newTodo.save().then(doc => {
             res.status(200).json(doc);
         })
-    } catch (error) {
-        res.status(500).send(error.message);
+    } catch (err) {
+        const errorBody = {error: {code:"mongoose", message: err.message}}
+        res.status(500).json(errorBody);
     }
 })
 
@@ -59,7 +60,7 @@ router.get('/:id', function(req,res){
     Todo.findById(req.params.id, function(err, doc){
         const errorBody = {error: {code:"invalid-id", message:"Given ID is invalid"}}
         if (err || !doc) return res.status(400).json(errorBody)
-        res.status(200).send(doc)
+        res.status(200).json(doc)
     })
 })
 
@@ -90,8 +91,11 @@ router.delete('/:id', function(req,res){
     if (!req.params.id) return res.send("invalid id");
 
     Todo.findByIdAndDelete(req.params.id, function(err,doc){
-        if (err || !doc) return res.status(400).send("Error, invalid ID")
-        return res.send("deleted")
+        if (err || !doc) {
+            const errorBody = {error: {code:"invalid-id", message:"Given ID is invalid"}}
+            return res.status(400).json(errorBody)
+        }
+        return res.status(200).send("deleted")
     })
 })
 
