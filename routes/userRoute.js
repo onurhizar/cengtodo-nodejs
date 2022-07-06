@@ -3,9 +3,10 @@ const router = express.Router();
 const User = require("../models/User");
 
 
-// GET /api/user/
+// GET /api/user/ ::: Lists users
 router.get('/', function(req,res){
-    User.find({}, function(err,users){
+    const returningFields = "_id username role"; // only return this fields of data
+    User.find({}, returningFields ,function(err,users){
         if (err) {
             const errorBody = {error: {code:"mongoose", message: err.message}}
             console.log(errorBody.error.code, err.message)
